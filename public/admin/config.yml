@@ -2,7 +2,7 @@
 # After deploy: set `repo` to the GitHub repo, then Jacob logs in at /admin with GitHub.
 backend:
   name: github
-  repo: OWNER/REPO # TODO: e.g. jasoncombs/jcwrks-portfolio
+  repo: BARRELLABS/jcwrks-portfolio
   branch: main
 
 # Lets you test the CMS locally with:  npx @sveltia/cms-server   (or  npx decap-server)
