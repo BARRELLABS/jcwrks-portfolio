@@ -16,6 +16,13 @@ collections:
     label_singular: Gallery
     description: Pick a gallery, set its cover photo, then add or remove photos.
     files:
+      - name: sports
+        label: Sports (main tile cover)
+        file: src/data/galleries/sports.json
+        media_folder: /public/galleries/sports
+        public_folder: /galleries/sports
+        fields:
+          - { label: Cover photo (the Sports tile image), name: cover, widget: image, required: false, choose_url: false }
       - name: basketball
         label: Basketball
         file: src/data/galleries/basketball.json
