@@ -1,0 +1,30 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Gallery from "../../../components/Gallery.astro";
+import { categories, getCategory } from "../../../data/categories";
+import { getGalleryImages } from "../../../lib/galleries";
+
+export function getStaticPaths() {
+  return categories
+    .filter((c) => c.type === "group")
+    .flatMap((c) => c.sub!.map((s) => ({ params: { category: c.slug, sub: s.slug } })));
+}
+
+const { category, sub } = Astro.params;
+const cat = getCategory(category!);
+const gallery = cat?.sub?.find((s) => s.slug === sub);
+if (!cat || !gallery) return Astro.redirect("/photo-video");
+const images = getGalleryImages(gallery.slug);
+---
+<Layout title={`${gallery.title} — Jacob Combs`}>
+  <section class="mx-auto max-w-[1400px] px-6 sm:px-10 pt-28 sm:pt-32 pb-16">
+    <a href={`/work/${cat.slug}`} class="text-fog hover:text-bone text-sm">← {cat.title}</a>
+    <div data-reveal class="mt-6 mb-10 sm:mb-14">
+      <p class="text-fog tracking-[0.25em] uppercase text-[11px] mb-4 flex items-center gap-3">
+        <span class="h-px w-7 bg-accent inline-block"></span> {cat.title}
+      </p>
+      <h1 class="font-display font-medium text-5xl sm:text-6xl tracking-[-0.02em]">{gallery.title}</h1>
+    </div>
+    <Gallery label={gallery.title} images={images} count={gallery.count} />
+  </section>
+</Layout>

@@ -1,0 +1,12 @@
+{
+  "images": [
+    {
+      "src": "/galleries/basketball/test-1.jpg",
+      "alt": "Test hoops"
+    },
+    {
+      "src": "/galleries/basketball/test-2.jpg",
+      "alt": ""
+    }
+  ]
+}

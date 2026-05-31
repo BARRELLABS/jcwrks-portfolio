@@ -1,0 +1,173 @@
+# Sveltia CMS config.
+# After deploy: set `repo` to the GitHub repo, then Jacob logs in at /admin with GitHub.
+backend:
+  name: github
+  repo: OWNER/REPO # TODO: e.g. jasoncombs/jcwrks-portfolio
+  branch: main
+
+# Lets you test the CMS locally with:  npx @sveltia/cms-server   (or  npx decap-server)
+local_backend: true
+
+media_folder: public/galleries
+public_folder: /galleries
+
+collections:
+  - name: galleries
+    label: Photo Galleries
+    label_singular: Gallery
+    description: Pick a gallery, then add or remove photos.
+    files:
+      - name: basketball
+        label: Basketball
+        file: src/data/galleries/basketball.json
+        media_folder: /public/galleries/basketball
+        public_folder: /galleries/basketball
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: football
+        label: Football
+        file: src/data/galleries/football.json
+        media_folder: /public/galleries/football
+        public_folder: /galleries/football
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: soccer
+        label: Soccer
+        file: src/data/galleries/soccer.json
+        media_folder: /public/galleries/soccer
+        public_folder: /galleries/soccer
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: baseball
+        label: Baseball
+        file: src/data/galleries/baseball.json
+        media_folder: /public/galleries/baseball
+        public_folder: /galleries/baseball
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: softball
+        label: Softball
+        file: src/data/galleries/softball.json
+        media_folder: /public/galleries/softball
+        public_folder: /galleries/softball
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: hockey
+        label: Hockey
+        file: src/data/galleries/hockey.json
+        media_folder: /public/galleries/hockey
+        public_folder: /galleries/hockey
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: track
+        label: Track
+        file: src/data/galleries/track.json
+        media_folder: /public/galleries/track
+        public_folder: /galleries/track
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: portraits
+        label: Portraits
+        file: src/data/galleries/portraits.json
+        media_folder: /public/galleries/portraits
+        public_folder: /galleries/portraits
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: landscape
+        label: Landscape
+        file: src/data/galleries/landscape.json
+        media_folder: /public/galleries/landscape
+        public_folder: /galleries/landscape
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: cars
+        label: Cars
+        file: src/data/galleries/cars.json
+        media_folder: /public/galleries/cars
+        public_folder: /galleries/cars
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }
+      - name: graphics
+        label: Graphics
+        file: src/data/galleries/graphics.json
+        media_folder: /public/galleries/graphics
+        public_folder: /galleries/graphics
+        fields:
+          - label: Photos
+            name: images
+            widget: list
+            label_singular: Photo
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: Photo, name: src, widget: image, choose_url: false }
+              - { label: Caption (optional), name: alt, widget: string, required: false }

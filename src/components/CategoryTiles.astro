@@ -1,0 +1,50 @@
+---
+import { categories } from "../data/categories";
+import Placeholder from "./Placeholder.astro";
+
+interface Props {
+  heading?: string;
+  showIntro?: boolean;
+}
+const { heading = "The work", showIntro = true } = Astro.props;
+---
+<section class="mx-auto max-w-[1400px] px-6 sm:px-10 pt-8 sm:pt-10 pb-16 sm:pb-24">
+  {showIntro && (
+    <div data-reveal class="mb-9 sm:mb-12 max-w-2xl">
+      <p class="text-fog tracking-[0.25em] uppercase text-[11px] mb-4 flex items-center gap-3">
+        <span class="h-px w-7 bg-accent inline-block"></span> Categories
+      </p>
+      <h2 class="font-display font-medium text-4xl sm:text-5xl tracking-[-0.02em]">{heading}</h2>
+    </div>
+  )}
+
+  <!-- masonry: full photos at natural shape, nothing cropped -->
+  <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
+    {categories.map((cat, i) => (
+      <a
+        href={`/work/${cat.slug}`}
+        data-reveal
+        class="group relative mb-3 sm:mb-4 block break-inside-avoid overflow-hidden rounded-2xl border border-line hover:border-accent/40 transition-colors duration-500"
+        style={`animation-delay:${i * 60}ms`}
+      >
+        {cat.cover ? (
+          <img src={cat.cover} alt={cat.title} class="block w-full h-auto transition-transform duration-[1100ms] ease-out group-hover:scale-105" />
+        ) : (
+          <Placeholder label={cat.title} seed={i + 1} class="block w-full aspect-[4/5] transition-transform duration-[1100ms] ease-out group-hover:scale-105" />
+        )}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+
+        <span class="absolute top-6 left-7 text-white/60 text-xs tabular-nums group-hover:text-accent-bright transition-colors duration-300">{String(i + 1).padStart(2, "0")}</span>
+
+        <div class="absolute inset-x-0 bottom-0 p-6 flex flex-col text-white">
+          <h3 class="font-display font-medium text-2xl sm:text-3xl tracking-[-0.01em]">{cat.title}</h3>
+          <p class="text-white/70 text-sm mt-1.5 max-w-xs">{cat.blurb}</p>
+          <span class="mt-4 inline-flex items-center gap-2 text-[13px] text-white/85">
+            <span>{cat.type === "group" ? "Browse sports" : "View gallery"}</span>
+            <span class="text-accent-bright transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

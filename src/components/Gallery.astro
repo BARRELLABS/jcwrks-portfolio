@@ -1,0 +1,100 @@
+---
+import Placeholder from "./Placeholder.astro";
+import type { GalleryImage } from "../lib/galleries";
+
+interface Props {
+  label: string; // e.g. "Baseball"
+  images?: GalleryImage[]; // real photos from the CMS
+  count?: number; // placeholder count when there are no photos yet
+}
+const { label, images = [], count = 6 } = Astro.props;
+const hasPhotos = images.length > 0;
+// varied aspect ratios so the placeholder masonry feels organic
+const ratios = ["aspect-[3/4]", "aspect-[4/3]", "aspect-square", "aspect-[3/4]", "aspect-[4/5]", "aspect-[5/4]"];
+const placeholders = Array.from({ length: count }, (_, i) => i);
+---
+{hasPhotos ? (
+  <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
+    {images.map((img, i) => (
+      <button
+        data-lightbox
+        data-src={img.src}
+        data-reveal
+        class="group mb-3 sm:mb-4 w-full break-inside-avoid block overflow-hidden rounded-2xl border border-line"
+        style={`animation-delay:${(i % 6) * 60}ms`}
+      >
+        <img
+          src={img.src}
+          alt={img.alt || `${label} ${i + 1}`}
+          loading="lazy"
+          decoding="async"
+          class="w-full h-auto block transition-transform duration-700 group-hover:scale-105"
+        />
+      </button>
+    ))}
+  </div>
+) : (
+  <div>
+    <p class="text-fog text-sm mb-6">Photos coming soon.</p>
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance] opacity-60">
+      {placeholders.map((i) => (
+        <div class="mb-3 sm:mb-4 w-full break-inside-avoid overflow-hidden rounded-2xl border border-line">
+          <Placeholder label={`${label} ${i + 1}`} seed={i + 2} class={`w-full ${ratios[i % ratios.length]}`} />
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+<!-- lightbox (only wired when there are real photos) -->
+{hasPhotos && (
+  <div
+    data-lb
+    class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/95 backdrop-blur-sm p-4 text-white"
+  >
+    <button data-lb-close class="absolute top-5 right-5 text-white/70 hover:text-white p-2" aria-label="Close">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <button data-lb-prev class="absolute left-3 sm:left-8 text-white/70 hover:text-white p-2" aria-label="Previous">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button data-lb-next class="absolute right-3 sm:right-8 text-white/70 hover:text-white p-2" aria-label="Next">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <img data-lb-img class="max-w-[92vw] max-h-[88svh] w-auto h-auto rounded-xl object-contain" src="" alt="" />
+    <p data-lb-cap class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.25em] text-white/40"></p>
+  </div>
+)}
+
+<script>
+  const lb = document.querySelector("[data-lb]") as HTMLElement | null;
+  const img = document.querySelector("[data-lb-img]") as HTMLImageElement | null;
+  const cap = document.querySelector("[data-lb-cap]") as HTMLElement | null;
+  const triggers = Array.from(document.querySelectorAll("[data-lightbox]")) as HTMLElement[];
+  let idx = 0;
+
+  const show = (i: number) => {
+    if (!lb || !img || !cap || !triggers.length) return;
+    idx = (i + triggers.length) % triggers.length;
+    img.src = triggers[idx].getAttribute("data-src") || "";
+    cap.textContent = `${idx + 1} / ${triggers.length}`;
+    lb.classList.remove("hidden");
+    lb.classList.add("flex");
+  };
+  const close = () => {
+    lb?.classList.add("hidden");
+    lb?.classList.remove("flex");
+  };
+
+  triggers.forEach((t, i) => t.addEventListener("click", () => show(i)));
+  document.querySelector("[data-lb-close]")?.addEventListener("click", close);
+  document.querySelector("[data-lb-next]")?.addEventListener("click", () => show(idx + 1));
+  document.querySelector("[data-lb-prev]")?.addEventListener("click", () => show(idx - 1));
+  lb?.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb || lb.classList.contains("hidden")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowRight") show(idx + 1);
+    if (e.key === "ArrowLeft") show(idx - 1);
+  });
+</script>

@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../data/site";
+
+// Paste Jacob's scheduling embed URL here once his calendar is connected.
+// Works with Google Calendar Appointment Schedule, Calendly, or Cal.com.
+const SCHEDULER_URL = ""; // e.g. "https://calendar.google.com/calendar/appointments/..." or "https://calendly.com/jacobcombs/15min"
+---
+<Layout title="Book a Call — Jacob Combs">
+  <section class="mx-auto max-w-[1100px] px-6 sm:px-10 pt-28 sm:pt-32 pb-24">
+    <a href="/contact" class="text-fog hover:text-bone text-sm">← Back to contact</a>
+    <h1 data-reveal class="font-display font-medium text-4xl sm:text-6xl tracking-[-0.02em] mt-6 mb-4">
+      <span class="text-fog">Let's hop on a</span> quick call.
+    </h1>
+    <p data-reveal class="text-fog text-lg max-w-xl mb-10">
+      Pick a time that works for you — about 15 minutes to talk through your shoot.
+    </p>
+
+    {SCHEDULER_URL ? (
+      <div data-reveal class="rounded-3xl border border-line bg-charcoal overflow-hidden">
+        <iframe src={SCHEDULER_URL} title="Book a call with Jacob" class="w-full" style="height:760px;border:0;"></iframe>
+      </div>
+    ) : (
+      <div data-reveal class="rounded-3xl border border-line bg-charcoal p-8 sm:p-12 text-center">
+        <p class="text-fog mb-2">Online scheduling is being set up.</p>
+        <p class="text-bone text-lg mb-6">For now, email me and we'll find a time:</p>
+        <a href={`mailto:${site.email}?subject=Let's%20set%20up%20a%20call`} class="btn btn-solid px-7 py-3 text-sm">Email to set up a call</a>
+      </div>
+    )}
+  </section>
+</Layout>

@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* surfaces — light/white theme (Jacob wants white) */
+  --color-ink: #ffffff;       /* page background */
+  --color-charcoal: #f7f7f8;  /* cards / raised surfaces */
+  --color-panel: #f0f0f2;     /* inputs / deeper panels */
+  --color-line: #e6e6e9;      /* hairlines / borders */
+
+  /* text */
+  --color-bone: #131316;      /* primary text (near-black) */
+  --color-fog: #6b6b73;       /* muted text */
+
+  /* accent — Jacob's purple, slightly deeper for contrast on white */
+  --color-accent: #7c3aed;
+  --color-accent-bright: #8b5cf6;
+
+  /* type: clean modern grotesque (sleek, like the reference) */
+  --font-display: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-name: "Bricolage Grotesque", "Inter Tight", sans-serif; /* his name */
+  --font-sig: "Allura", cursive; /* signature flourish */
+}
+
+html { scroll-behavior: smooth; color-scheme: light; }
+body {
+  background-color: var(--color-ink);
+  color: var(--color-bone);
+  /* faint purple wash so the white has subtle depth, not a flat fill */
+  background-image:
+    radial-gradient(900px 600px at 85% -5%, rgba(124, 58, 237, 0.05), transparent 70%),
+    radial-gradient(700px 500px at 0% 100%, rgba(124, 58, 237, 0.035), transparent 70%);
+  background-attachment: fixed;
+}
+
+/* ---- buttons: satisfying purple fill that wipes across on hover ---- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: color 0.35s ease, border-color 0.35s ease, transform 0.2s ease;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn:hover::before { transform: scaleX(1); }
+.btn:hover { color: #fff; }
+.btn:active { transform: scale(0.97); }
+
+/* solid (was bg-bone) — dark pill that fills purple */
+.btn-solid { background: var(--color-bone); color: var(--color-ink); }
+.btn-solid:hover { color: #fff; }
+
+/* outline/ghost — transparent, border, fills purple */
+.btn-outline { border: 1px solid color-mix(in srgb, var(--color-fog) 45%, transparent); color: var(--color-bone); }
+.btn-outline:hover { border-color: var(--color-accent); color: #fff; }
+
+/* logo hover */
+.logo-link { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+.logo-link:hover { transform: scale(1.06); }
+.logo-link:active { transform: scale(0.98); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn::before { transition: none; }
+}
+
+/* Lenis smooth scroll */
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* very subtle film grain (photographic, not flashy) */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* hero cutout: dissolve the bottom edge into a soft blur (the "blurry thing") */
+.hero-mask-fade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 99%);
+}
+.hero-mask-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 62%, #000 82%, transparent 99%);
+  mask-image: linear-gradient(to bottom, transparent 62%, #000 82%, transparent 99%);
+}
+
+/* gentle hero entrance — quiet zoom-out, no blur drama */
+@keyframes heroSettle {
+  from { transform: scale(1.14); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.hero-load { animation: heroSettle 1.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* soft fade-up for sections */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+[data-reveal] { opacity: 0; }
+[data-reveal].is-in { animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-load, [data-reveal].is-in { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}

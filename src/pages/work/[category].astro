@@ -1,0 +1,50 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Gallery from "../../components/Gallery.astro";
+import Placeholder from "../../components/Placeholder.astro";
+import { categories, getCategory } from "../../data/categories";
+import { getGalleryImages } from "../../lib/galleries";
+
+export function getStaticPaths() {
+  return categories.map((c) => ({ params: { category: c.slug } }));
+}
+
+const { category } = Astro.params;
+const cat = getCategory(category!);
+if (!cat) return Astro.redirect("/photo-video");
+const images = cat.type === "gallery" ? getGalleryImages(cat.slug) : [];
+---
+<Layout title={`${cat.title} — Jacob Combs`}>
+  <section class="mx-auto max-w-[1400px] px-6 sm:px-10 pt-28 sm:pt-32 pb-16">
+    <a href="/photo-video" class="text-fog hover:text-bone text-sm">← All categories</a>
+    <div data-reveal class="mt-6 mb-10 sm:mb-14">
+      <h1 class="font-display font-medium text-5xl sm:text-6xl tracking-[-0.02em]">{cat.title}</h1>
+      <p class="text-fog mt-4 max-w-xl">{cat.blurb}</p>
+    </div>
+
+    {cat.type === "group" ? (
+      <div class="columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
+        {cat.sub!.map((s, i) => (
+          <a
+            href={`/work/${cat.slug}/${s.slug}`}
+            data-reveal
+            class="group relative mb-3 sm:mb-4 block break-inside-avoid overflow-hidden rounded-2xl border border-line hover:border-accent/40 transition-colors duration-500"
+            style={`animation-delay:${i * 60}ms`}
+          >
+            {s.cover ? (
+              <img src={s.cover} alt={s.title} class="block w-full h-auto transition-transform duration-[1100ms] group-hover:scale-105" />
+            ) : (
+              <Placeholder label={s.title} seed={i + 3} class="block w-full aspect-[4/5] transition-transform duration-[1100ms] group-hover:scale-105" />
+            )}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+            <div class="absolute inset-x-0 bottom-0 p-6 flex flex-col text-white">
+              <h3 class="font-display font-medium text-xl sm:text-2xl tracking-[-0.01em]">{s.title}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <Gallery label={cat.title} images={images} count={cat.count!} />
+    )}
+  </section>
+</Layout>

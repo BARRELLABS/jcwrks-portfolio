@@ -1,0 +1,94 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../data/site";
+import Socials from "../components/Socials.astro";
+const inputCls =
+  "w-full bg-panel border border-line rounded-lg px-4 py-3 text-bone placeholder:text-fog/50 focus:outline-none focus:border-accent transition-colors";
+---
+<Layout title="Contact — Jacob Combs">
+  <section class="mx-auto max-w-[1200px] px-6 sm:px-10 pt-28 sm:pt-32 pb-24">
+    <h1 data-reveal class="font-display font-medium text-4xl sm:text-6xl tracking-[-0.02em] mb-10 sm:mb-14">
+      <span class="text-fog">Ready to create something?</span> Let's talk.
+    </h1>
+
+    <div class="grid lg:grid-cols-[1.55fr_1fr] gap-6 sm:gap-8 items-start">
+      <!-- our own form — no third-party watermark; emails Jacob on deploy (Netlify Forms) -->
+      <form
+        data-reveal
+        name="inquiry"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="rounded-3xl bg-charcoal border border-line p-6 sm:p-8"
+      >
+        <input type="hidden" name="form-name" value="inquiry" />
+        <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+        <p class="text-fog text-[13px] mb-6"><span class="text-accent-bright">*</span> Required</p>
+
+        <div class="space-y-5">
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm text-bone mb-2"><span class="text-accent-bright">*</span> Name</label>
+              <input class={inputCls} type="text" name="name" required placeholder="First Last" />
+            </div>
+            <div>
+              <label class="block text-sm text-bone mb-2"><span class="text-accent-bright">*</span> Email</label>
+              <input class={inputCls} type="email" name="email" required placeholder="yourname@gmail.com" />
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm text-bone mb-2">Phone</label>
+              <input class={inputCls} type="tel" name="phone" placeholder="xxx-xxx-xxxx" />
+            </div>
+            <div>
+              <label class="block text-sm text-bone mb-2"><span class="text-accent-bright">*</span> Interested in</label>
+              <select class={inputCls} name="interest" required>
+                <option value="">Select…</option>
+                <option>Sports / Game coverage</option>
+                <option>Portraits</option>
+                <option>Cars</option>
+                <option>Graphics</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-bone mb-2">Got a date or deadline?</label>
+            <input class={inputCls} type="text" name="date" placeholder="ex. Late April 2026" />
+          </div>
+          <div>
+            <label class="block text-sm text-bone mb-2"><span class="text-accent-bright">*</span> Tell me about it</label>
+            <textarea class={inputCls} name="message" rows="5" required placeholder="What do you have in mind?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-solid w-full px-8 py-3 text-sm">Send it</button>
+        </div>
+      </form>
+
+      <!-- side: book a call + info -->
+      <div data-reveal style="animation-delay:120ms" class="space-y-4 lg:sticky lg:top-28">
+        <div class="rounded-3xl bg-charcoal border border-line p-6 sm:p-7">
+          <img src="/jacob-headshot-chip.jpg" alt="Jacob Combs" class="w-16 h-16 rounded-full object-cover border border-line mb-5" />
+          <p class="text-lg leading-relaxed">
+            <span class="font-medium text-bone">Prefer a quick chat?</span>
+            <span class="text-fog"> Pick a time that works and we'll hop on a quick call about your shoot.</span>
+          </p>
+          <div class="mt-5 inline-block rounded-full bg-panel px-4 py-1.5 text-fog text-sm">≈ 15 minutes</div>
+          <a href="/call" class="btn btn-outline mt-6 block w-full px-6 py-3 text-sm">Book a call</a>
+        </div>
+
+        <div class="rounded-3xl bg-charcoal border border-line p-6 sm:p-7">
+          <p class="text-fog text-[11px] uppercase tracking-[0.25em] mb-2">Email</p>
+          <a href={`mailto:${site.email}`} class="font-display font-medium text-lg break-all hover:text-accent-bright transition-colors">{site.email}</a>
+          <p class="text-fog text-sm mt-1">I reply {site.responseTime}.</p>
+
+          <p class="text-fog text-[11px] uppercase tracking-[0.25em] mt-6 mb-2">Based in / covers</p>
+          <p class="font-medium">{site.coverage}</p>
+
+          <Socials class="mt-6" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,33 @@
+---
+// A deterministic placeholder "photo". Renders a dark gradient tile with a
+// subtle label so it's obviously a stand-in. Swap <Placeholder/> for Astro's
+// <Image/> once real photos are dropped in.
+interface Props {
+  label?: string;
+  seed?: number;
+  class?: string;
+}
+const { label = "Photo", seed = 0, class: className = "" } = Astro.props;
+
+// spread hues widely per seed so a grid of placeholders has real tonal variety
+// (stands in for the color a real photo would bring)
+const hue = (seed * 57 + 205) % 360;
+const a = `hsl(${hue} 26% 23%)`;
+const b = `hsl(${(hue + 45) % 360} 32% 10%)`;
+---
+<div
+  class={`relative overflow-hidden ${className}`}
+  style={`background: linear-gradient(135deg, ${a}, ${b});`}
+>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <span class="text-[11px] uppercase tracking-[0.25em] text-white/25 font-display">
+      {label}
+    </span>
+  </div>
+  <!-- faux grain -->
+  <div
+    class="absolute inset-0 opacity-[0.05] mix-blend-overlay"
+    style="background-image:radial-gradient(circle at 25% 25%, #fff 0.5px, transparent 0.6px); background-size:4px 4px;"
+  >
+  </div>
+</div>

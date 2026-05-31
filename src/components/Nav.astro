@@ -1,0 +1,74 @@
+---
+import { site } from "../data/site";
+const links = [
+  { href: "/photo-video", label: "Photo & Video" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+const path = Astro.url.pathname;
+---
+<header
+  data-nav
+  class="fixed top-0 inset-x-0 z-50 transition-colors duration-300 border-b border-transparent"
+>
+  <nav class="mx-auto max-w-[1400px] px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
+    <!-- logo + wordmark -->
+    <a href="/" class="logo-link flex items-center gap-2.5 group">
+      <img src="/logo.png" alt="jcwrks logo" class="h-10 w-auto shrink-0" />
+      <span class="font-display font-medium tracking-tight text-xl text-bone group-hover:text-accent transition-colors">
+        {site.brand}
+      </span>
+    </a>
+
+    <!-- desktop links -->
+    <div class="hidden md:flex items-center gap-8">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class:list={[
+            "text-sm font-medium tracking-wide transition-colors hover:text-bone inline-flex items-center",
+            path.startsWith(l.href) ? "text-bone" : "text-fog",
+          ]}
+        >
+          {l.label}
+          {path.startsWith(l.href) && <span class="ml-1.5 w-1 h-1 rounded-full bg-accent"></span>}
+        </a>
+      ))}
+      <a href="/contact" class="btn btn-solid text-sm px-5 py-2">Book</a>
+    </div>
+
+    <!-- mobile toggle -->
+    <button data-menu-btn class="md:hidden text-bone p-2 -mr-2" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- mobile menu -->
+  <div data-menu class="hidden md:hidden border-t border-line bg-ink/95 backdrop-blur">
+    <div class="px-5 py-4 flex flex-col gap-1">
+      {links.map((l) => (
+        <a href={l.href} class="py-2.5 text-base text-fog hover:text-bone">{l.label}</a>
+      ))}
+      <a href="/contact" class="btn btn-solid mt-2 py-2.5 font-medium">Book</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector("[data-nav]");
+  const onScroll = () => {
+    if (window.scrollY > 24) {
+      nav?.classList.add("bg-ink/80", "backdrop-blur-md", "!border-line");
+    } else {
+      nav?.classList.remove("bg-ink/80", "backdrop-blur-md", "!border-line");
+    }
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  const btn = document.querySelector("[data-menu-btn]");
+  const menu = document.querySelector("[data-menu]");
+  btn?.addEventListener("click", () => menu?.classList.toggle("hidden"));
+</script>

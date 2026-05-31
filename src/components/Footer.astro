@@ -1,0 +1,36 @@
+---
+import { site } from "../data/site";
+import Socials from "./Socials.astro";
+const year = 2026; // Date.now() unavailable at build in this env; bump as needed
+---
+<footer class="border-t border-line">
+  <div class="mx-auto max-w-[1400px] px-6 sm:px-10 py-16 sm:py-20">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
+      <div data-reveal>
+        <p class="text-fog text-[11px] uppercase tracking-[0.25em] mb-5 flex items-center gap-3">
+          <span class="h-px w-7 bg-accent inline-block"></span> Got a shoot in mind?
+        </p>
+        <h2 class="font-display font-medium text-4xl sm:text-5xl leading-[1.0] tracking-[-0.02em]">
+          <span class="text-fog">Let's tell</span><br />your story.
+        </h2>
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <a href="/contact" class="btn btn-solid px-6 py-2.5 text-sm">Book a shoot</a>
+          <a href={`mailto:${site.email}`} class="btn btn-outline px-6 py-2.5 text-sm">{site.email}</a>
+        </div>
+      </div>
+
+      <div class="md:self-end">
+        <Socials />
+      </div>
+    </div>
+
+    <div class="mt-14 pt-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-fog">
+      <div class="flex items-center gap-2.5">
+        <img src="/logo.png" alt="jcwrks logo" class="h-7 w-auto" />
+        <span class="font-display font-medium text-bone">{site.brand}</span>
+      </div>
+      <p>© {year} {site.name}</p>
+      <a href="#top" class="hover:text-bone transition-colors">Back to top ↑</a>
+    </div>
+  </div>
+</footer>

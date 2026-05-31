@@ -1,0 +1,131 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { gear, software } from "../data/tools";
+---
+<Layout title="About — Jacob Combs">
+  <!-- Intro: headline beside a portrait (editorial, balanced) -->
+  <section class="mx-auto max-w-[1200px] px-6 sm:px-10 pt-28 sm:pt-36 pb-16 sm:pb-24">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+      <div data-reveal class="order-2 lg:order-1">
+        <p class="text-fog tracking-[0.25em] uppercase text-[11px] mb-6 flex items-center gap-3">
+          <span class="h-px w-7 bg-accent inline-block"></span> About
+        </p>
+        <h1 class="font-display font-medium text-4xl sm:text-5xl tracking-[-0.02em] leading-[1.08]">
+          <span class="text-fog">Jacob Combs is a sports photographer who turns</span>
+          split-seconds into shots worth keeping.
+        </h1>
+        <img src="/jacob-signature.png" alt="Jacob Combs signature" class="mt-8 h-16 sm:h-20 w-auto" />
+      </div>
+
+      <div data-reveal style="animation-delay:120ms" class="order-1 lg:order-2">
+        <img src="/about/about-1.jpg" alt="Jacob Combs" class="w-full h-auto rounded-3xl border border-line" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Bio: label left, text right -->
+  <section class="mx-auto max-w-[1200px] px-6 sm:px-10 pb-16 sm:pb-24">
+    <div class="grid lg:grid-cols-[180px_1fr] gap-8 lg:gap-16 border-t border-line pt-14 sm:pt-20">
+      <div data-reveal>
+        <p class="text-fog tracking-[0.25em] uppercase text-[11px] flex items-center gap-3 lg:sticky lg:top-28">
+          <span class="h-px w-7 bg-accent inline-block"></span> About Me
+        </p>
+      </div>
+      <div data-reveal style="animation-delay:100ms" class="max-w-2xl">
+        <h2 class="font-display font-medium text-2xl sm:text-4xl tracking-[-0.02em] leading-[1.15] mb-8">
+          I know how much a single picture can truly mean to someone.
+        </h2>
+        <div class="space-y-5 text-fog text-[17px] leading-relaxed">
+          <p>
+            It started with my mom's camera. I picked it up, started shooting some of my
+            buddies' games, and one thing led to another — a few clients turned into more,
+            and it's grown from there.
+          </p>
+          <p>
+            I love shooting sports because I grew up an athlete, so I know how much a single
+            picture can truly mean to someone. That's what keeps me chasing the moment every
+            time I'm out there.
+          </p>
+          <p>
+            Working with me is easy — I keep the mood light and I want you smiling the whole
+            time. I'm always trying to learn more about my clients to make a real connection,
+            because to me it's more than just pictures. It's the human side of it, and getting
+            a genuine smile out of you.
+          </p>
+          <p>
+            Off the clock, I'm a sophomore at Michigan State in the Eli Broad College of
+            Business, majoring in marketing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- portrait photo: him shooting on location, paired with a caption -->
+  <section class="mx-auto max-w-[1200px] px-6 sm:px-10 pb-20 sm:pb-28">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+      <div data-reveal>
+        <img src="/about/about-2.jpg" alt="Jacob Combs shooting on location" class="w-full h-auto rounded-3xl border border-line" />
+      </div>
+      <div data-reveal style="animation-delay:120ms" class="order-first lg:order-none">
+        <p class="text-fog tracking-[0.25em] uppercase text-[11px] mb-6 flex items-center gap-3">
+          <span class="h-px w-7 bg-accent inline-block"></span> Behind the lens
+        </p>
+        <p class="font-display font-medium text-2xl sm:text-3xl tracking-[-0.02em] leading-[1.25]">
+          <span class="text-fog">Camera in hand,</span> right where I belong.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- My Tools -->
+  <section class="mx-auto max-w-[1200px] px-6 sm:px-10 pb-24 sm:pb-32">
+    <div class="border-t border-line pt-14 sm:pt-20">
+      <h2 data-reveal class="font-display font-medium text-3xl sm:text-5xl tracking-[-0.02em] mb-3">My Tools</h2>
+      <p data-reveal class="text-fog mb-10 sm:mb-12">The gear and software behind the work.</p>
+
+      <p data-reveal class="text-fog tracking-[0.25em] uppercase text-[11px] mb-4 flex items-center gap-3">
+        <span class="h-px w-7 bg-accent inline-block"></span> Gear
+      </p>
+      <div class="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-10">
+        {gear.map((t, i) => (
+          <div
+            data-reveal
+            style={`animation-delay:${i * 60}ms`}
+            class="group flex items-center gap-4 rounded-2xl border border-line bg-charcoal p-4 hover:border-accent/40 transition-colors duration-300"
+          >
+            <img src={t.icon} alt={t.name} class="shrink-0 w-12 h-12 rounded-xl" />
+            <div>
+              <p class="font-medium text-bone">{t.name}</p>
+              <p class="text-fog text-sm">{t.blurb}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p data-reveal class="text-fog tracking-[0.25em] uppercase text-[11px] mb-4 flex items-center gap-3">
+        <span class="h-px w-7 bg-accent inline-block"></span> Software
+      </p>
+      <div class="grid sm:grid-cols-2 gap-3 sm:gap-4">
+        {software.map((t, i) => (
+          <div
+            data-reveal
+            style={`animation-delay:${i * 60}ms`}
+            class="group flex items-center gap-4 rounded-2xl border border-line bg-charcoal p-4 hover:border-accent/40 transition-colors duration-300"
+          >
+            <img src={t.icon} alt={t.name} class="shrink-0 w-12 h-12 rounded-xl" />
+            <div>
+              <p class="font-medium text-bone">{t.name}</p>
+              <p class="text-fog text-sm">{t.blurb}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-12 flex flex-wrap gap-3">
+        <a href="/contact" class="btn btn-solid px-6 py-2.5 text-sm">Work with me</a>
+        <a href="/photo-video" class="btn btn-outline px-6 py-2.5 text-sm">See the work</a>
+      </div>
+    </div>
+  </section>
+</Layout>
