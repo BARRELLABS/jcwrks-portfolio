@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Gallery from "../../components/Gallery.astro";
 import Placeholder from "../../components/Placeholder.astro";
 import { categories, getCategory } from "../../data/categories";
-import { getGalleryImages } from "../../lib/galleries";
+import { getGalleryImages, getCover } from "../../lib/galleries";
 
 export function getStaticPaths() {
   return categories.map((c) => ({ params: { category: c.slug } }));
@@ -31,8 +31,8 @@ const images = cat.type === "gallery" ? getGalleryImages(cat.slug) : [];
             class="group relative mb-3 sm:mb-4 block break-inside-avoid overflow-hidden rounded-2xl border border-line hover:border-accent/40 transition-colors duration-500"
             style={`animation-delay:${i * 60}ms`}
           >
-            {s.cover ? (
-              <img src={s.cover} alt={s.title} class="block w-full h-auto transition-transform duration-[1100ms] group-hover:scale-105" />
+            {getCover(s.slug, s.cover) ? (
+              <img src={getCover(s.slug, s.cover)} alt={s.title} class="block w-full h-auto transition-transform duration-[1100ms] group-hover:scale-105" />
             ) : (
               <Placeholder label={s.title} seed={i + 3} class="block w-full aspect-[4/5] transition-transform duration-[1100ms] group-hover:scale-105" />
             )}

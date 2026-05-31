@@ -1,12 +1,15 @@
 ---
 import { categories } from "../data/categories";
 import Placeholder from "./Placeholder.astro";
+import { getCover } from "../lib/galleries";
 
 interface Props {
   heading?: string;
   showIntro?: boolean;
 }
 const { heading = "The work", showIntro = true } = Astro.props;
+// CMS cover (from the gallery JSON) wins; fall back to the hardcoded cover in categories.ts
+const tiles = categories.map((cat) => ({ ...cat, resolvedCover: getCover(cat.slug, cat.cover) }));
 ---
 <section class="mx-auto max-w-[1400px] px-6 sm:px-10 pt-8 sm:pt-10 pb-16 sm:pb-24">
   {showIntro && (
@@ -18,24 +21,21 @@ const { heading = "The work", showIntro = true } = Astro.props;
     </div>
   )}
 
-  <!-- masonry: full photos at natural shape, nothing cropped -->
   <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
-    {categories.map((cat, i) => (
+    {tiles.map((cat, i) => (
       <a
         href={`/work/${cat.slug}`}
         data-reveal
         class="group relative mb-3 sm:mb-4 block break-inside-avoid overflow-hidden rounded-2xl border border-line hover:border-accent/40 transition-colors duration-500"
         style={`animation-delay:${i * 60}ms`}
       >
-        {cat.cover ? (
-          <img src={cat.cover} alt={cat.title} class="block w-full h-auto transition-transform duration-[1100ms] ease-out group-hover:scale-105" />
+        {cat.resolvedCover ? (
+          <img src={cat.resolvedCover} alt={cat.title} class="block w-full h-auto transition-transform duration-[1100ms] ease-out group-hover:scale-105" />
         ) : (
           <Placeholder label={cat.title} seed={i + 1} class="block w-full aspect-[4/5] transition-transform duration-[1100ms] ease-out group-hover:scale-105" />
         )}
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
-
         <span class="absolute top-6 left-7 text-white/60 text-xs tabular-nums group-hover:text-accent-bright transition-colors duration-300">{String(i + 1).padStart(2, "0")}</span>
-
         <div class="absolute inset-x-0 bottom-0 p-6 flex flex-col text-white">
           <h3 class="font-display font-medium text-2xl sm:text-3xl tracking-[-0.01em]">{cat.title}</h3>
           <p class="text-white/70 text-sm mt-1.5 max-w-xs">{cat.blurb}</p>

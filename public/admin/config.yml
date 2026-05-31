@@ -1,11 +1,10 @@
 # Sveltia CMS config.
-# After deploy: set `repo` to the GitHub repo, then Jacob logs in at /admin with GitHub.
 backend:
   name: github
   repo: BARRELLABS/jcwrks-portfolio
   branch: main
 
-# Lets you test the CMS locally with:  npx @sveltia/cms-server   (or  npx decap-server)
+# local testing: npx @sveltia/cms-server  (or npx decap-server)
 local_backend: true
 
 media_folder: public/galleries
@@ -15,7 +14,7 @@ collections:
   - name: galleries
     label: Photo Galleries
     label_singular: Gallery
-    description: Pick a gallery, then add or remove photos.
+    description: Pick a gallery, set its cover photo, then add or remove photos.
     files:
       - name: basketball
         label: Basketball
@@ -23,11 +22,13 @@ collections:
         media_folder: /public/galleries/basketball
         public_folder: /galleries/basketball
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -37,11 +38,13 @@ collections:
         media_folder: /public/galleries/football
         public_folder: /galleries/football
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -51,11 +54,13 @@ collections:
         media_folder: /public/galleries/soccer
         public_folder: /galleries/soccer
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -65,11 +70,13 @@ collections:
         media_folder: /public/galleries/baseball
         public_folder: /galleries/baseball
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -79,11 +86,13 @@ collections:
         media_folder: /public/galleries/softball
         public_folder: /galleries/softball
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -93,11 +102,13 @@ collections:
         media_folder: /public/galleries/hockey
         public_folder: /galleries/hockey
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -107,11 +118,13 @@ collections:
         media_folder: /public/galleries/track
         public_folder: /galleries/track
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -121,11 +134,13 @@ collections:
         media_folder: /public/galleries/portraits
         public_folder: /galleries/portraits
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -135,11 +150,13 @@ collections:
         media_folder: /public/galleries/landscape
         public_folder: /galleries/landscape
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -149,11 +166,13 @@ collections:
         media_folder: /public/galleries/cars
         public_folder: /galleries/cars
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
@@ -163,11 +182,13 @@ collections:
         media_folder: /public/galleries/graphics
         public_folder: /galleries/graphics
         fields:
+          - { label: Cover photo (the tile image), name: cover, widget: image, required: false, choose_url: false }
           - label: Photos
             name: images
             widget: list
             label_singular: Photo
             summary: "{{fields.alt}}"
+            required: false
             fields:
               - { label: Photo, name: src, widget: image, choose_url: false }
               - { label: Caption (optional), name: alt, widget: string, required: false }
