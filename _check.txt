@@ -1,5 +1,0 @@
-354cde2 Crop about-1 photo to reduce sky
-REMOTE:
-354cde2
-ABOUT-1 SIZE:
-1100x1229
