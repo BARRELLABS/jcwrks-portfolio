@@ -1,8 +1,4 @@
 {
-  "images": [
-    {
-      "src": "/galleries/basketball/test-1.jpg",
-      "alt": "Test hoops"
-    }
-  ]
+  "cover": "/covers/basketball.jpg",
+  "images": []
 }
