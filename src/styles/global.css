@@ -74,8 +74,111 @@ body {
 .logo-link:hover { transform: scale(1.06); }
 .logo-link:active { transform: scale(0.98); }
 
+/* ---- hero text entrance: rise-up reveal on first load ---- */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-rise {
+  opacity: 0;
+  animation: heroRise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+/* the name: a masked line the text sweeps up from behind.
+   pad+negative-margin gives descenders (g, y, p) room without changing layout. */
+.hero-rise-line { display: block; overflow: hidden; padding: 0.12em 0.04em 0.18em; margin: -0.12em -0.04em -0.18em; }
+.hero-rise-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: nameSweep 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes nameSweep {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+
+/* ---- statement: word-by-word cascade reveal on scroll ----
+   pad+negative-margin keeps descenders visible while clipping the rise. */
+.word-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0.05em 0 0.22em;
+  margin: -0.05em 0 -0.22em;
+}
+.word {
+  display: inline-block;
+  transform: translateY(105%);
+  opacity: 0;
+}
+.words-in .word {
+  animation: wordRise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+@keyframes wordRise {
+  from { transform: translateY(105%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ---- #4: logo "develops" like a darkroom print on first load ---- */
+@keyframes develop {
+  0%   { opacity: 0; filter: brightness(0.2) blur(8px) saturate(0); transform: scale(0.92); }
+  60%  { opacity: 1; filter: brightness(0.7) blur(2px) saturate(0.6); }
+  100% { opacity: 1; filter: brightness(1) blur(0) saturate(1); transform: scale(1); }
+}
+.logo-develop { animation: develop 1.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ---- #6: scroll progress / exposure meter bar (top of page) ---- */
+.scroll-meter {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(var(--p, 0));
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-bright));
+  z-index: 60;
+  pointer-events: none;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 60%, transparent);
+}
+
+/* ---- #2: camera shutter flash on hero click ---- */
+.shutter {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background: #fff;
+  opacity: 0;
+}
+.shutter.fire { animation: shutterFlash 0.32s ease-out; }
+@keyframes shutterFlash {
+  0%   { opacity: 0; }
+  8%   { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+/* the aperture frame lines that snap in with the flash */
+.shutter-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 91;
+  pointer-events: none;
+  opacity: 0;
+}
+.shutter-frame.fire { animation: frameSnap 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes frameSnap {
+  0%   { opacity: 0; transform: scale(1.04); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .btn::before { transition: none; }
+  .btn::before, .logo-develop, .scroll-meter, .shutter, .shutter-frame,
+  .hero-rise, .hero-rise-inner { animation: none !important; transition: none !important; }
+  .logo-develop { opacity: 1 !important; filter: none !important; transform: none !important; }
+  .hero-rise, .hero-rise-inner { opacity: 1 !important; transform: none !important; }
+  .word { opacity: 1 !important; transform: none !important; animation: none !important; }
 }
 
 /* Lenis smooth scroll */

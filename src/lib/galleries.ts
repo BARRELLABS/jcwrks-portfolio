@@ -28,3 +28,8 @@ export function getGalleryImages(slug: string): GalleryImage[] {
 export function getCover(slug: string, fallback?: string): string | undefined {
   return coverBySlug[slug] || fallback;
 }
+
+// Total real photos across every gallery — for the live "moments captured" counter.
+export function getTotalPhotos(): number {
+  return Object.values(imagesBySlug).reduce((sum, imgs) => sum + imgs.length, 0);
+}

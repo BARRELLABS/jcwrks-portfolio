@@ -1,7 +1,9 @@
 ---
 import { site } from "../data/site";
 import Socials from "./Socials.astro";
+import { getTotalPhotos } from "../lib/galleries";
 const year = 2026; // Date.now() unavailable at build in this env; bump as needed
+const totalPhotos = getTotalPhotos();
 ---
 <footer class="border-t border-line">
   <div class="mx-auto max-w-[1400px] px-6 sm:px-10 py-16 sm:py-20">
@@ -24,6 +26,13 @@ const year = 2026; // Date.now() unavailable at build in this env; bump as neede
       </div>
     </div>
 
+    {totalPhotos > 0 && (
+      <div data-reveal class="mt-12 pt-8 border-t border-line flex items-center gap-3">
+        <span class="font-display font-medium text-3xl sm:text-4xl text-bone tabular-nums" data-photo-count data-to={totalPhotos}>0</span>
+        <span class="text-fog text-sm uppercase tracking-[0.2em]">moments<br class="hidden sm:block" /> captured</span>
+      </div>
+    )}
+
     <div class="mt-14 pt-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-fog">
       <div class="flex items-center gap-2.5">
         <img src="/logo.png" alt="jcwrks logo" class="h-7 w-auto" />
@@ -34,3 +43,30 @@ const year = 2026; // Date.now() unavailable at build in this env; bump as neede
     </div>
   </div>
 </footer>
+
+<script>
+  // #3: count up the "moments captured" number when it scrolls into view
+  const el = document.querySelector("[data-photo-count]") as HTMLElement | null;
+  if (el) {
+    const to = Number(el.dataset.to || "0");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const run = () => {
+      if (reduce) { el.textContent = String(to); return; }
+      const dur = 1400; let start = 0;
+      const step = (t: number) => {
+        if (!start) start = t;
+        const p = Math.min((t - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = String(Math.round(to * eased));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { run(); io.disconnect(); } });
+      }, { threshold: 0.6 });
+      io.observe(el);
+    } else { run(); }
+  }
+</script>

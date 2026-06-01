@@ -1,15 +1,47 @@
 ---
-// Editorial breather — two-tone heading like the reference (muted lead, solid emphasis).
+// Editorial breather — two-tone heading with a word-by-word cascade reveal on scroll.
+// Each word rises into place in sequence, with the emphasis words in solid bone.
+const lead = "Nothing beats freezing the moment everyone's going to remember —";
+const emphasis = "the big plays, the real emotion, the stuff you'll want to look back on.";
+const tail = "Shot clean. That's what I'm here for.";
+
+const leadWords = lead.split(" ");
+const emWords = emphasis.split(" ");
+const tailWords = tail.split(" ");
+// continuous stagger index across all words
+let n = 0;
 ---
 <section class="mx-auto max-w-[1400px] px-6 sm:px-10 pt-16 sm:pt-24 pb-6 sm:pb-8 border-t border-line">
-  <div data-reveal class="max-w-4xl">
-    <p class="text-fog tracking-[0.25em] uppercase text-[11px] mb-6 flex items-center gap-3">
+  <div class="max-w-4xl">
+    <p data-reveal class="text-fog tracking-[0.25em] uppercase text-[11px] mb-6 flex items-center gap-3">
       <span class="h-px w-7 bg-accent inline-block"></span> The approach
     </p>
-    <p class="font-display font-medium text-3xl sm:text-5xl leading-[1.12] tracking-[-0.02em] text-fog">
-      Nothing beats freezing the moment everyone's going to remember —
-      <span class="text-bone">the big plays, the real emotion, the stuff you'll want to look back on.</span>
-      Shot clean. That's what I'm here for.
+    <p data-words class="font-display font-medium text-3xl sm:text-5xl leading-[1.12] tracking-[-0.02em] text-fog">
+      {leadWords.map((w) => (
+        <span class="word-wrap"><span class="word" style={`--i:${n++}`}>{w}&nbsp;</span></span>
+      ))}
+      {emWords.map((w) => (
+        <span class="word-wrap"><span class="word text-bone" style={`--i:${n++}`}>{w}&nbsp;</span></span>
+      ))}
+      {tailWords.map((w) => (
+        <span class="word-wrap"><span class="word" style={`--i:${n++}`}>{w}&nbsp;</span></span>
+      ))}
     </p>
   </div>
 </section>
+
+<script>
+  // trigger the word cascade when the line scrolls into view
+  const p = document.querySelector("[data-words]");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (p && !reduce && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("words-in"); io.disconnect(); }
+      });
+    }, { threshold: 0.35 });
+    io.observe(p);
+  } else if (p) {
+    p.classList.add("words-in");
+  }
+</script>

@@ -48,6 +48,16 @@ const canonical = new URL(Astro.url.pathname, siteUrl).href;
   </head>
   <body class="grain font-body antialiased selection:bg-accent selection:text-white">
     <span id="top"></span>
+    <!-- #6: scroll progress / exposure meter -->
+    <div class="scroll-meter" data-scroll-meter></div>
+    <!-- #2: camera shutter flash overlays (fire on hero click) -->
+    <div class="shutter" data-shutter></div>
+    <div class="shutter-frame" data-shutter-frame aria-hidden="true">
+      <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <path d="M6 6 H20 M6 6 V20 M94 6 H80 M94 6 V20 M6 94 H20 M6 94 V80 M94 94 H80 M94 94 V80"
+          fill="none" stroke="#ffffff" stroke-width="0.5" vector-effect="non-scaling-stroke" opacity="0.9" />
+      </svg>
+    </div>
     <Nav />
     <main>
       <slot />
@@ -69,6 +79,39 @@ const canonical = new URL(Astro.url.pathname, siteUrl).href;
             if (id === "#top" || id === "#") lenis.scrollTo(0);
             else lenis.scrollTo(id);
           });
+        });
+      }
+    </script>
+
+    <script>
+      // ---- #6: scroll progress / exposure meter ----
+      const meter = document.querySelector("[data-scroll-meter]") as HTMLElement | null;
+      if (meter) {
+        let ticking = false;
+        const update = () => {
+          const h = document.documentElement.scrollHeight - window.innerHeight;
+          const p = h > 0 ? Math.min(window.scrollY / h, 1) : 0;
+          meter.style.setProperty("--p", p.toFixed(4));
+          ticking = false;
+        };
+        window.addEventListener("scroll", () => {
+          if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
+        update();
+      }
+
+      // ---- #2: camera shutter flash when clicking the hero ----
+      const shutter = document.querySelector("[data-shutter]") as HTMLElement | null;
+      const frame = document.querySelector("[data-shutter-frame]") as HTMLElement | null;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const hero = document.querySelector("[data-hero]");
+      if (hero && shutter && frame && !reduce) {
+        hero.addEventListener("click", (e) => {
+          // don't fire when clicking the buttons/links in the hero
+          if ((e.target as HTMLElement).closest("a,button")) return;
+          shutter.classList.remove("fire"); frame.classList.remove("fire");
+          void shutter.offsetWidth; // restart animation
+          shutter.classList.add("fire"); frame.classList.add("fire");
         });
       }
     </script>
