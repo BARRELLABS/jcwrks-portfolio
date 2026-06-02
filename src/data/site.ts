@@ -1,7 +1,7 @@
 // Global site info. Swap placeholders for Jacob's real details when ready.
 export const site = {
   name: "Jacob Combs",
-  brand: "jcwrks",
+  brand: "jc_wrks",
   role: "Sports Photographer",
   email: "jacobcombsphotography@gmail.com",
   // response expectation shown on Contact/Book

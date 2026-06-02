@@ -29,7 +29,7 @@ export const categories: Category[] = [
   {
     slug: "sports",
     title: "Sports",
-    blurb: "Where I do my best work — game on the line, everything to play for.",
+    blurb: "Where I Do My Best Work — Game On The Line, Everything To Play For.",
     type: "group",
     cover: "/covers/sports.jpg",
     sub: [
@@ -45,7 +45,7 @@ export const categories: Category[] = [
   {
     slug: "portraits",
     title: "Portraits",
-    blurb: "Real people, real personality — let's make you look good.",
+    blurb: "Real People, Real Personality — Let's Make You Look Good.",
     type: "gallery",
     count: 10,
     cover: "/covers/portraits.jpg",
@@ -53,7 +53,7 @@ export const categories: Category[] = [
   {
     slug: "landscape",
     title: "Landscape",
-    blurb: "When the scenery's too good not to shoot.",
+    blurb: "When The Scenery's Too Good Not To Shoot.",
     type: "gallery",
     count: 8,
     cover: "/covers/landscape.jpg",
@@ -61,7 +61,7 @@ export const categories: Category[] = [
   {
     slug: "cars",
     title: "Cars",
-    blurb: "Clean builds and good light — my kind of detail work.",
+    blurb: "Clean Builds And Good Light — My Kind Of Detail Work.",
     type: "gallery",
     count: 8,
     cover: "/covers/cars.jpg",
@@ -69,7 +69,7 @@ export const categories: Category[] = [
   {
     slug: "graphics",
     title: "Graphics",
-    blurb: "Commitments, game day, senior night — I'll design it for you.",
+    blurb: "Commitments, Game Day, Senior Night — I'll Design It For You.",
     type: "gallery",
     count: 8,
     cover: "/covers/graphics.jpg",
