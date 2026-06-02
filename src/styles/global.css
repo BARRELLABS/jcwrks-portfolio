@@ -121,13 +121,88 @@ body {
   to   { transform: translateY(0); opacity: 1; }
 }
 
-/* ---- #4: logo "develops" like a darkroom print on first load ---- */
-@keyframes develop {
-  0%   { opacity: 0; filter: brightness(0.2) blur(8px) saturate(0); transform: scale(0.92); }
-  60%  { opacity: 1; filter: brightness(0.7) blur(2px) saturate(0.6); }
-  100% { opacity: 1; filter: brightness(1) blur(0) saturate(1); transform: scale(1); }
+/* ---- #4: logo draws itself with a spark, bursts, then settles into the real logo ---- */
+.logo-draw { position: relative; display: inline-block; }
+.logo-draw .draw-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.logo-draw .star-path {
+  fill: none;
+  stroke: var(--color-accent-bright);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 5px var(--color-accent-bright)) drop-shadow(0 0 11px var(--color-accent));
+  animation: starDraw 1.1s cubic-bezier(0.5, 0, 0.2, 1) forwards,
+             strokeFade 0.4s ease-out 1.15s forwards;
 }
-.logo-develop { animation: develop 1.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes starDraw { to { stroke-dashoffset: 0; } }
+@keyframes strokeFade { to { opacity: 0; } }
+
+/* bright comet head riding the stroke */
+.logo-draw .spark {
+  fill: #fff;
+  filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px var(--color-accent-bright)) drop-shadow(0 0 16px var(--color-accent));
+  animation: sparkOut 0.3s ease-out 1.05s forwards;
+}
+@keyframes sparkOut { to { opacity: 0; transform: scale(0.4); } }
+
+/* completion flash ring that pops out behind the logo */
+.logo-draw .burst {
+  fill: none;
+  stroke: var(--color-accent-bright);
+  stroke-width: 4;
+  opacity: 0;
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  animation: burstRing 0.55s ease-out 1.05s forwards;
+}
+@keyframes burstRing {
+  0%   { opacity: 0.9; transform: scale(0.2); stroke-width: 6; }
+  100% { opacity: 0; transform: scale(1.9); stroke-width: 0.5; }
+}
+
+/* little spark particles flicking outward on completion */
+.logo-draw .particle {
+  fill: var(--color-accent-bright);
+  opacity: 0;
+  transform-origin: 50px 50px;
+  filter: drop-shadow(0 0 3px var(--color-accent));
+}
+.logo-draw .particle { animation: particleFly 0.55s ease-out 1.08s forwards; }
+.logo-draw .p2 { animation-delay: 1.12s; }
+.logo-draw .p3 { animation-delay: 1.1s; }
+@keyframes particleFly {
+  0%   { opacity: 1; transform: translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--px,0), var(--py,0)) scale(0.2); }
+}
+
+/* the real logo settles in with a tiny overshoot + shimmer */
+.logo-draw .logo-real {
+  opacity: 0;
+  animation: logoSettle 0.65s cubic-bezier(0.34, 1.56, 0.5, 1) 1.12s forwards;
+}
+@keyframes logoSettle {
+  0%   { opacity: 0; transform: scale(0.78); filter: blur(3px) brightness(1.8); }
+  60%  { opacity: 1; transform: scale(1.06); filter: blur(0) brightness(1.3); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0) brightness(1); }
+}
+
+/* a twinkling sparkle that pops on the logo after it settles, then again on hover */
+.logo-draw .twinkle {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 0.9s ease-out 1.55s 1;
+}
+.logo-draw .tw2 { animation-delay: 1.75s; }
+.logo-link:hover .logo-draw .twinkle { animation: twinkle 0.8s ease-out 0s 1; }
+.logo-link:hover .logo-draw .tw2 { animation-delay: 0.12s; }
+@keyframes twinkle {
+  0%   { opacity: 0; transform: scale(0) rotate(0deg); }
+  45%  { opacity: 1; transform: scale(1) rotate(35deg); }
+  100% { opacity: 0; transform: scale(0.2) rotate(70deg); }
+}
 
 /* ---- #6: scroll progress / exposure meter bar (top of page) ---- */
 .scroll-meter {
@@ -174,11 +249,15 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn::before, .logo-develop, .scroll-meter, .shutter, .shutter-frame,
-  .hero-rise, .hero-rise-inner { animation: none !important; transition: none !important; }
-  .logo-develop { opacity: 1 !important; filter: none !important; transform: none !important; }
+  .btn::before, .scroll-meter, .shutter, .shutter-frame,
+  .hero-rise, .hero-rise-inner,
+  .logo-draw .star-path, .logo-draw .spark, .logo-draw .logo-real, .logo-draw .twinkle { animation: none !important; transition: none !important; }
   .hero-rise, .hero-rise-inner { opacity: 1 !important; transform: none !important; }
   .word { opacity: 1 !important; transform: none !important; animation: none !important; }
+  /* reduced motion: just show the real logo, hide the drawing */
+  .logo-draw .draw-svg { display: none; }
+  .logo-draw .logo-real { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .logo-draw .twinkle { opacity: 0 !important; }
 }
 
 /* Lenis smooth scroll */
