@@ -10,7 +10,7 @@ export const site = {
   coverage: "Metro Detroit & East Lansing, MI",
   socials: {
     instagram: { label: "Instagram", handle: "jc_wrks", url: "https://instagram.com/jc_wrks" },
-    tiktok: { label: "TikTok", handle: "j.combs11", url: "https://tiktok.com/@j.combs11" },
+    tiktok: { label: "TikTok", handle: "jc_wrks1", url: "https://tiktok.com/@jc_wrks1" },
     x: { label: "X", handle: "jc_wrks", url: "https://x.com/jc_wrks" },
     linkedin: { label: "LinkedIn", handle: "Jacob Combs", url: "https://www.linkedin.com/in/jacob-combs1127/" },
   },
