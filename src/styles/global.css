@@ -204,6 +204,17 @@ body {
   100% { opacity: 0; transform: scale(0.2) rotate(70deg); }
 }
 
+/* ---- signature "writes itself" — left-to-right reveal wipe (no sparkle) ---- */
+.sign-write { clip-path: inset(0 100% 0 0); }
+.sign-write.writing { animation: signWrite 1.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards; }
+@keyframes signWrite {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sign-write, .sign-write.writing { clip-path: none !important; animation: none !important; }
+}
+
 /* ---- #6: scroll progress / exposure meter bar (top of page) ---- */
 .scroll-meter {
   position: fixed;

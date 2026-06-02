@@ -100,6 +100,27 @@ const canonical = new URL(Astro.url.pathname, siteUrl).href;
         update();
       }
 
+      // ---- signature writes itself (hero: after load; others: on scroll-in) ----
+      const signs = Array.from(document.querySelectorAll("[data-sign]")) as HTMLElement[];
+      const reduceSign = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      signs.forEach((sig) => {
+        if (reduceSign) { sig.classList.remove("sign-write"); return; }
+        const inHero = !!sig.closest("[data-hero]");
+        if (inHero) {
+          // play once the hero text has risen in
+          setTimeout(() => sig.classList.add("writing"), 800);
+        } else if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) { (e.target as HTMLElement).classList.add("writing"); io.unobserve(e.target); }
+            });
+          }, { threshold: 0.6 });
+          io.observe(sig);
+        } else {
+          sig.classList.add("writing");
+        }
+      });
+
       // ---- #2: camera shutter flash when clicking the hero ----
       const shutter = document.querySelector("[data-shutter]") as HTMLElement | null;
       const frame = document.querySelector("[data-shutter-frame]") as HTMLElement | null;
