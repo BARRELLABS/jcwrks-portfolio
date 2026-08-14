@@ -4,6 +4,13 @@
  * Uses @imgly/background-removal-node — an AI model that runs LOCALLY.
  * The image never leaves your computer; first run downloads the model once.
  *
+ * ⚠️ NOT a project dependency. It's ~178MB and the site build never calls this
+ * script, so keeping it in package.json just made every Netlify build install
+ * 178MB of ONNX models for nothing. Install it only when you actually need a
+ * new cutout:
+ *   npm i --no-save @imgly/background-removal-node
+ * (Known to break on Node 24 — use Node 22 if it errors out.)
+ *
  * Usage:
  *   node scripts/cutout.mjs "<input image path>" "<output png in /public>"
  * Example:
