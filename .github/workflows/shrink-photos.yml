@@ -17,6 +17,9 @@ on:
     branches: [main]
     paths:
       - "public/galleries/**"
+  # Lets you sweep every gallery on demand from the Actions tab, and gives a way
+  # to test the job without pushing a big photo just to trigger it.
+  workflow_dispatch:
 
 # Two uploads in quick succession would otherwise race to push.
 concurrency:
