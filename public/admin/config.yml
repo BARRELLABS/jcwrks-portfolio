@@ -10,6 +10,25 @@ local_backend: true
 media_folder: public/galleries
 public_folder: /galleries
 
+# Shrink photos IN THE BROWSER, before they're uploaded.
+#
+# Jacob uploads straight off the camera (~8MB a shot). Sveltia base64-encodes
+# the file into a GitHub API request, so an 8MB photo becomes a ~10.7MB request
+# — slow, and it sometimes fails silently, which is why uploads occasionally
+# never showed up at all. Transforming first means ~300KB leaves his machine
+# instead of 8MB, so there's nothing left to choke on.
+#
+# 2000px deliberately matches MAX_EDGE in scripts/optimize-images.mjs, so the
+# build-time optimizer sees an already-correct file and leaves it alone.
+media_libraries:
+  all:
+    transformations:
+      raster_image:
+        format: webp
+        quality: 85
+        width: 2000
+        height: 2000
+
 collections:
   - name: galleries
     label: Photo Galleries
