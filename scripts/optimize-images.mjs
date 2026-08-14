@@ -2,7 +2,7 @@
 // any oversized image IN PLACE, so Jacob can upload full-res straight from his
 // camera and the live site stays fast. Idempotent: already-small files are skipped.
 import sharp from "sharp";
-import { readdir, stat, rename } from "node:fs/promises";
+import { readdir, stat, rename, unlink } from "node:fs/promises";
 import { join, extname } from "node:path";
 
 const ROOTS = ["public/galleries", "public/covers", "public/about"];
@@ -53,6 +53,17 @@ for (const root of ROOTS) {
       } else {
         await pipeline.jpeg({ quality: QUALITY, mozjpeg: true }).toFile(tmp);
       }
+      // Only keep the re-encode if it's a real win. A detailed photo can sit
+      // just over MAX_BYTES while already being at MAX_EDGE and well compressed
+      // — re-encoding it buys ~2% and costs a generation of quality. Without
+      // this guard that photo gets recompressed on every single run, forever.
+      const { size: newSize } = await stat(tmp);
+      if (newSize > size * 0.9) {
+        await unlink(tmp);
+        skipped++;
+        continue;
+      }
+
       await rename(tmp, file);
       optimized++;
       console.log(`  optimized ${file}`);
