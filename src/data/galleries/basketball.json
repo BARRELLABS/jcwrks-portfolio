@@ -1,4 +1,9 @@
 {
   "cover": "/covers/basketball.jpg",
-  "images": []
+  "images": [
+    {
+      "src": "/galleries/basketball/5N1A7067-Enhanced-NR.webp",
+      "alt": ""
+    }
+  ]
 }
