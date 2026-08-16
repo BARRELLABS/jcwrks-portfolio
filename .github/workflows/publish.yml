@@ -51,3 +51,16 @@ jobs:
 
           git push origin main
           echo "Published. Netlify will build once and the site goes live in a minute or two."
+
+          # Keep staging level with main.
+          #
+          # sync-staging.yml can't do it here: GitHub deliberately does not fire
+          # workflows for pushes made with GITHUB_TOKEN, so the push above
+          # triggers nothing. After a fast-forward the branches already match,
+          # but if the merge above created a merge commit then main is ahead and
+          # staging would sit behind until someone pushed by hand.
+          #
+          # Rejected if Jacob uploaded while this ran — that's the point, it
+          # refuses rather than clobbering his work, and the next publish
+          # reconciles it.
+          git push origin main:staging || echo "staging has newer work of its own — leaving it alone."
