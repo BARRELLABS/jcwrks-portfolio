@@ -11,7 +11,13 @@
   # This is belt-and-braces: even if branch deploys or deploy previews get
   # turned on in the Netlify UI later, anything that isn't `main` is skipped
   # here. exit 0 = skip the build, exit 1 = go ahead and build.
-  ignore = 'if [ "$BRANCH" != "main" ]; then exit 0; else exit 1; fi'
+  #
+  # Deliberately FAILS OPEN. If BRANCH and CONTEXT are both empty — because
+  # they aren't populated in the ignore step, or Netlify changes them — we
+  # build rather than skip. Getting that backwards would silently wedge the
+  # site so it could never deploy again, which is far worse than one surplus
+  # build. The echo puts the values in the deploy log so this is debuggable.
+  ignore = 'echo "ignore-check BRANCH=$BRANCH CONTEXT=$CONTEXT"; if [ "$BRANCH" = "main" ] || [ "$CONTEXT" = "production" ] || [ -z "$BRANCH$CONTEXT" ]; then exit 1; fi; exit 0'
 
 [build.environment]
   NODE_VERSION = "22"
