@@ -50,6 +50,13 @@ jobs:
       - name: Shrink oversized images
         run: node scripts/optimize-images.mjs
 
+      # Turn uploaded files into real entries in the gallery JSON, so they show
+      # up in the CMS as rows Jacob can drag to reorder or caption. Renders
+      # identically either way — src/lib/galleries.ts already appends whatever
+      # is on disk — so this changes the CMS, not the site.
+      - name: Index uploaded photos into the galleries
+        run: node scripts/sync-galleries.mjs
+
       - name: Commit the smaller versions
         run: |
           if [ -z "$(git status --porcelain)" ]; then
@@ -64,7 +71,7 @@ jobs:
           # [skip ci] on purpose: Netlify already deployed this photo, and it
           # served the optimized version. The shrunk original renders
           # identically, so a second deploy would just burn build minutes.
-          git commit -m "Shrink uploaded photos [skip ci]"
+          git commit -m "Shrink and index uploaded photos [skip ci]"
 
           # Jacob's CMS pushes to main too — rebase in case he uploaded again
           # while this was running.
