@@ -1,8 +1,20 @@
 # Sveltia CMS config.
+# The CMS works on `staging`, NOT on `main`.
+#
+# Netlify bills for every production deploy, and Sveltia commits each upload
+# and each save separately — one editing session produced 58 deploys and burned
+# 870 of 1,000 monthly credits. Pointing the CMS at `staging` means Jacob can
+# upload and edit as much as he likes for free; nothing reaches the live site
+# until the Publish action runs and fast-forwards `main` (one deploy, one
+# batch). See .github/workflows/publish.yml.
+#
+# NOTE: Sveltia does NOT support `publish_mode: editorial_workflow` — the docs
+# say it's "not yet supported... will be added before the 1.0 release", so
+# setting it here would be silently ignored. This branch IS the staging area.
 backend:
   name: github
   repo: BARRELLABS/jcwrks-portfolio
-  branch: main
+  branch: staging
 
 # local testing: npx @sveltia/cms-server  (or npx decap-server)
 local_backend: true

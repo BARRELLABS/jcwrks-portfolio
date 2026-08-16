@@ -1,6 +1,17 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  # Only ever build the production branch.
+  #
+  # Every build Netlify runs is a billed production deploy. The CMS used to
+  # commit each upload straight to `main`, so a single editing session could
+  # fire off 40+ of them. Jacob's edits now land on `staging` and are published
+  # deliberately (see .github/workflows/publish.yml).
+  #
+  # This is belt-and-braces: even if branch deploys or deploy previews get
+  # turned on in the Netlify UI later, anything that isn't `main` is skipped
+  # here. exit 0 = skip the build, exit 1 = go ahead and build.
+  ignore = 'if [ "$BRANCH" != "main" ]; then exit 0; else exit 1; fi'
 
 [build.environment]
   NODE_VERSION = "22"

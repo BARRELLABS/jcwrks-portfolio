@@ -14,7 +14,7 @@ name: Shrink uploaded photos
 
 on:
   push:
-    branches: [main]
+    branches: [staging] # the CMS works on staging, so uploads land there
     paths:
       - "public/galleries/**"
   # Lets you sweep every gallery on demand from the Actions tab, and gives a way
@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: main
+          ref: staging
 
       - uses: actions/setup-node@v5
         with:
@@ -68,12 +68,15 @@ jobs:
           git config user.email "bot@jcwrks.local"
           git add -A
 
-          # [skip ci] on purpose: Netlify already deployed this photo, and it
-          # served the optimized version. The shrunk original renders
-          # identically, so a second deploy would just burn build minutes.
-          git commit -m "Shrink and index uploaded photos [skip ci]"
+          # Deliberately NO "[skip ci]" here any more.
+          #
+          # It used to be needed because this ran on main. Now it runs on
+          # staging, which Netlify never builds, so it buys nothing — and it
+          # would actively break publishing: publish fast-forwards main to the
+          # tip of staging, and if that tip carried [skip ci], Netlify would
+          # skip the one build that is supposed to put the batch live.
+          git commit -m "Shrink and index uploaded photos"
 
-          # Jacob's CMS pushes to main too — rebase in case he uploaded again
-          # while this was running.
+          # Jacob may well have uploaded again while this was running.
           git pull --rebase
           git push
