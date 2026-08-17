@@ -17,10 +17,12 @@
          below the section top (the entrance zoom overshoots scale 1.14 while
          still mostly transparent, so the brief extra lift never reads).
          Mobile stays gentler so his head clears the nav bar on phones.
-         (Jacob's tuning: 95/120/140 -> 88/110/125 -> 84/103/115 -> 80/97/107,
-         each step "a little smaller". Adjust height and translate TOGETHER
-         or he clips.) -->
-    <div data-hero-scroll class="relative will-change-transform flex items-end justify-center sm:translate-y-[1svh] lg:translate-y-[11svh]">
+         (Jacob's tuning: sizes 95/120/140 -> 88/110/125 -> 84/103/115 ->
+         80/97/107, then "too tall" — so the translates got bigger WITHOUT a
+         size change: sliding him down drops his head to ~11svh (under the
+         nav, where the original had it) and shortens the visible figure
+         while keeping his width. Height & translate move TOGETHER or he clips.) -->
+    <div data-hero-scroll class="relative will-change-transform flex items-end justify-center translate-y-[3svh] sm:translate-y-[8svh] lg:translate-y-[18svh]">
       <!-- blurred echo so the bottom edge melts instead of cutting hard -->
       <img src="/jacob-hero-bw.png" aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-auto mx-auto blur-2xl opacity-60 hero-mask-bottom" />
       <!-- sharp subject, bottom faded -->
