@@ -42,6 +42,28 @@ media_libraries:
         height: 2000
 
 collections:
+  - name: settings
+    label: Site Numbers
+    files:
+      - name: stats
+        label: "\"Moments Captured\" counter"
+        file: src/data/stats.json
+        description: >-
+          The big number at the bottom of the site. By default it just counts
+          the photos uploaded here, which is only a slice of what you've
+          actually shot — put your real total in and it'll use that instead.
+        fields:
+          - label: Total photos you've taken
+            name: photosTaken
+            widget: number
+            value_type: int
+            min: 0
+            default: 0
+            required: false
+            hint: >-
+              Your best honest estimate across every shoot, career-wide. Leave
+              it at 0 to just count the photos on the site.
+
   - name: galleries
     label: Photo Galleries
     label_singular: Gallery

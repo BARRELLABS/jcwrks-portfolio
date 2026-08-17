@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /publish
 
 Sitemap: https://jcwrks.com/sitemap-index.xml

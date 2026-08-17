@@ -1,9 +1,11 @@
 ---
 import { site } from "../data/site";
 import Socials from "./Socials.astro";
-import { getTotalPhotos } from "../lib/galleries";
+import { getMomentsCaptured } from "../lib/stats";
 const year = 2026; // Date.now() unavailable at build in this env; bump as needed
-const totalPhotos = getTotalPhotos();
+// Jacob's real career total if he's set one in the CMS, otherwise a count of
+// what's uploaded here. See src/lib/stats.ts.
+const totalPhotos = getMomentsCaptured();
 ---
 <footer class="border-t border-line">
   <div class="mx-auto max-w-[1400px] px-6 sm:px-10 py-16 sm:py-20">
@@ -28,7 +30,7 @@ const totalPhotos = getTotalPhotos();
 
     {totalPhotos > 0 && (
       <div data-reveal class="mt-12 pt-8 border-t border-line flex items-center gap-3">
-        <span class="font-display font-medium text-3xl sm:text-4xl text-bone tabular-nums" data-photo-count data-to={totalPhotos}>0</span>
+        <span class="font-display font-medium text-3xl sm:text-4xl text-bone tabular-nums" data-photo-count data-to={totalPhotos}>{totalPhotos.toLocaleString("en-US")}</span>
         <span class="text-fog text-sm uppercase tracking-[0.2em]">moments<br class="hidden sm:block" /> captured</span>
       </div>
     )}
@@ -50,14 +52,21 @@ const totalPhotos = getTotalPhotos();
   if (el) {
     const to = Number(el.dataset.to || "0");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Thousands separators — Jacob's real total can run into five figures,
+    // and "38400" reads a lot worse than "38,400".
+    const fmt = (n: number) => n.toLocaleString("en-US");
+    // The final figure is rendered server-side so it's correct without JS.
+    // Reset to 0 up front (it's below the fold) so the count-up doesn't look
+    // like the number glitching backwards when it scrolls into view.
+    if (!reduce) el.textContent = "0";
     const run = () => {
-      if (reduce) { el.textContent = String(to); return; }
+      if (reduce) { el.textContent = fmt(to); return; }
       const dur = 1400; let start = 0;
       const step = (t: number) => {
         if (!start) start = t;
         const p = Math.min((t - start) / dur, 1);
         const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = String(Math.round(to * eased));
+        el.textContent = fmt(Math.round(to * eased));
         if (p < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);

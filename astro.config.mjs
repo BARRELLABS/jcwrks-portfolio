@@ -6,7 +6,9 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://jcwrks.com',
-  integrations: [sitemap()],
+  // /publish is Jacob's internal "put my changes live" button — useful to him,
+  // noise to Google. Keep it out of the sitemap (robots.txt blocks it too).
+  integrations: [sitemap({ filter: (page) => !page.includes('/publish') })],
   vite: {
     plugins: [tailwindcss()]
   }

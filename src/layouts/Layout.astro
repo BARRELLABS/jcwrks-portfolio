@@ -8,11 +8,14 @@ interface Props {
   title?: string;
   description?: string;
   hideFooter?: boolean;
+  /** Internal pages (e.g. /publish) that shouldn't show up in search. */
+  noindex?: boolean;
 }
 const {
   title = `${site.name} — ${site.role}`,
   description = "Sports photography, portraits & custom graphics by Jacob Combs.",
   hideFooter = false,
+  noindex = false,
 } = Astro.props;
 const siteUrl = "https://jcwrks.com";
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
@@ -28,6 +31,7 @@ const canonical = new URL(Astro.url.pathname, siteUrl).href;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
 
     <!-- Open Graph (link previews in texts / iMessage / social) -->
