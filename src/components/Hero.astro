@@ -17,13 +17,14 @@
          below the section top (the entrance zoom overshoots scale 1.14 while
          still mostly transparent, so the brief extra lift never reads).
          Mobile stays gentler so his head clears the nav bar on phones.
-         (Jacob's tuning: 95/120/140 "a little too big" -> 88/110/125 "a touch
-         smaller" -> 84/103/115. Adjust height and translate TOGETHER or he clips.) -->
-    <div data-hero-scroll class="relative will-change-transform flex items-end justify-center sm:translate-y-[7svh] lg:translate-y-[19svh]">
+         (Jacob's tuning: 95/120/140 -> 88/110/125 -> 84/103/115 -> 80/97/107,
+         each step "a little smaller". Adjust height and translate TOGETHER
+         or he clips.) -->
+    <div data-hero-scroll class="relative will-change-transform flex items-end justify-center sm:translate-y-[1svh] lg:translate-y-[11svh]">
       <!-- blurred echo so the bottom edge melts instead of cutting hard -->
       <img src="/jacob-hero-bw.png" aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-auto mx-auto blur-2xl opacity-60 hero-mask-bottom" />
       <!-- sharp subject, bottom faded -->
-      <img src="/jacob-hero-bw.png" alt="Jacob Combs, freelance photographer" class="relative h-[84svh] sm:h-[103svh] lg:h-[115svh] w-auto object-contain hero-mask-fade" />
+      <img src="/jacob-hero-bw.png" alt="Jacob Combs, freelance photographer" class="relative h-[80svh] sm:h-[97svh] lg:h-[107svh] w-auto object-contain hero-mask-fade" />
     </div>
   </div>
 
