@@ -2,7 +2,7 @@
 export const site = {
   name: "Jacob Combs",
   brand: "jc_wrks",
-  role: "Sports Photographer",
+  role: "Freelance Photographer",
   email: "jacobcombsphotography@gmail.com",
   // response expectation shown on Contact/Book
   responseTime: "within 24 hours",
