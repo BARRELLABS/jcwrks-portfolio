@@ -1,4 +1,6 @@
 ---
+import sharp from "sharp";
+import { join } from "node:path";
 import Placeholder from "./Placeholder.astro";
 import type { GalleryImage } from "../lib/galleries";
 
@@ -9,16 +11,46 @@ interface Props {
 }
 const { label, images = [], count = 6 } = Astro.props;
 const hasPhotos = images.length > 0;
+
+// Measure every photo at build time (header read only — fast).
+//
+// Why: the gallery used to be CSS-columns masonry, which fills DOWN each
+// column and lets the browser rebalance by height — so the order Jacob set in
+// the CMS came out column-first and photos seemed to land "randomly". Knowing
+// each photo's aspect ratio lets a small script place them LEFT-TO-RIGHT into
+// balanced columns instead, deterministically. The width/height attributes
+// also stop the page jumping while images load.
+const enriched = await Promise.all(
+  images.map(async (img) => {
+    let w = 0, h = 0;
+    try {
+      const file = join(process.cwd(), "public", decodeURIComponent(img.src));
+      const m = await sharp(file).metadata();
+      w = m.width ?? 0;
+      h = m.height ?? 0;
+      // EXIF-rotated originals report sideways dimensions; orientations 5-8
+      // mean the camera was turned 90°, so displayed width/height swap.
+      if ((m.orientation ?? 1) >= 5) [w, h] = [h, w];
+    } catch {
+      // photo not on disk at build time (shouldn't happen) — layout script
+      // falls back to assuming 3:2 for this one, nothing breaks
+    }
+    return { ...img, w, h };
+  })
+);
+
 // varied aspect ratios so the placeholder masonry feels organic
 const ratios = ["aspect-[3/4]", "aspect-[4/3]", "aspect-square", "aspect-[3/4]", "aspect-[4/5]", "aspect-[5/4]"];
 const placeholders = Array.from({ length: count }, (_, i) => i);
 ---
 {hasPhotos ? (
-  <div class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
-    {images.map((img, i) => (
+  <div data-masonry class="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
+    {enriched.map((img, i) => (
       <button
         data-lightbox
+        data-index={i}
         data-src={img.src}
+        data-ar={img.w && img.h ? (img.w / img.h).toFixed(4) : ""}
         data-reveal
         class="group mb-3 sm:mb-4 w-full break-inside-avoid block overflow-hidden rounded-2xl border border-line"
         style={`animation-delay:${(i % 6) * 60}ms`}
@@ -26,6 +58,8 @@ const placeholders = Array.from({ length: count }, (_, i) => i);
         <img
           src={img.src}
           alt={img.alt || `${label} ${i + 1}`}
+          width={img.w || undefined}
+          height={img.h || undefined}
           loading="lazy"
           decoding="async"
           class="w-full h-auto block transition-transform duration-700 group-hover:scale-105"
@@ -67,10 +101,57 @@ const placeholders = Array.from({ length: count }, (_, i) => i);
 )}
 
 <script>
+  // ---- masonry that respects Jacob's order ----
+  //
+  // CSS `columns` fills DOWN each column and rebalances by height, so the
+  // order set in the CMS appeared column-first and photos seemed to jump
+  // around. This places each photo, in order, into whichever column is
+  // currently shortest (using the aspect ratios measured at build time), so
+  // the sequence reads left-to-right and the layout is deterministic —
+  // same photos, same order, same result, every load.
+  const wrap = document.querySelector("[data-masonry]") as HTMLElement | null;
+  if (wrap) {
+    const items = Array.from(wrap.querySelectorAll("[data-lightbox]")) as HTMLElement[];
+    const mqSm = window.matchMedia("(min-width: 640px)");
+    const mqLg = window.matchMedia("(min-width: 1024px)");
+
+    const layout = () => {
+      const n = mqLg.matches ? 3 : mqSm.matches ? 2 : 1;
+      wrap.setAttribute("class", "flex items-start gap-3 sm:gap-4");
+      const cols: { el: HTMLElement; h: number }[] = [];
+      wrap.replaceChildren();
+      for (let c = 0; c < n; c++) {
+        const col = document.createElement("div");
+        col.className = "flex-1 min-w-0";
+        wrap.appendChild(col);
+        cols.push({ el: col, h: 0 });
+      }
+      for (const item of items) {
+        // shortest column so far gets the next photo (heights in units of
+        // "column widths", which is fair because all columns are equal width)
+        const target = cols.reduce((a, b) => (b.h < a.h ? b : a));
+        target.el.appendChild(item);
+        const ar = parseFloat(item.dataset.ar || "") || 1.5; // unknown → assume 3:2
+        target.h += 1 / ar;
+      }
+    };
+
+    layout();
+    // column count is the only thing that changes placement, so only
+    // re-run when a breakpoint flips
+    mqSm.addEventListener("change", layout);
+    mqLg.addEventListener("change", layout);
+  }
+
   const lb = document.querySelector("[data-lb]") as HTMLElement | null;
   const img = document.querySelector("[data-lb-img]") as HTMLImageElement | null;
   const cap = document.querySelector("[data-lb-cap]") as HTMLElement | null;
-  const triggers = Array.from(document.querySelectorAll("[data-lightbox]")) as HTMLElement[];
+  // Sort by the index stamped at build time — the masonry above reparents
+  // buttons into column divs, so raw DOM order is column-major, and next/prev
+  // in the lightbox must follow Jacob's order, not the columns.
+  const triggers = (Array.from(document.querySelectorAll("[data-lightbox]")) as HTMLElement[]).sort(
+    (a, b) => Number(a.dataset.index || 0) - Number(b.dataset.index || 0)
+  );
   let idx = 0;
 
   const show = (i: number) => {
